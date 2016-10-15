@@ -10,7 +10,7 @@
 		<property name="ignoreResourceNotFound" value="false" />
 		<property name="locations">
 			<list>
-				<value>file:scenarios/other/idug2016/idug2016.properties</value>
+				<value>file:/tmp/idug2016.properties</value>
 			</list>
 		</property>
 	</bean>

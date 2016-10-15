@@ -14,11 +14,6 @@
 
 		<!-- the version of the BOM, defining all the dependency versions -->
 		<fabric8.version>2.2.59</fabric8.version>
-		<docker.maven.plugin.version>0.13.6</docker.maven.plugin.version>
-
-		<!-- Docker & Fabric8 Configs -->
-		<docker.from>fabric8/s2i-java:1.1.6</docker.from>
-		<docker.image>${project.artifactId}:${project.version}</docker.image>
 	</properties>
 
 	<dependencyManagement>
@@ -35,19 +30,51 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>me.jasonbaik</groupId>
-			<artifactId>mqtt-broker-tester</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.fusesource.mqtt-client</groupId>
+			<artifactId>mqtt-client</artifactId>
+			<version>1.13</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
-			<scope>test</scope>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
-			<groupId>io.fabric8</groupId>
-			<artifactId>fabric8-arquillian</artifactId>
-			<scope>test</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -63,9 +90,9 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>io.fabric8</groupId>
+				<groupId>org.jboss.hawt.app</groupId>
 				<artifactId>hawt-app-maven-plugin</artifactId>
-				<version>${fabric8.version}</version>
+				<version>1.3.0</version>
 				<executions>
 					<execution>
 						<id>hawt-app</id>
@@ -73,56 +100,44 @@
 							<goal>build</goal>
 						</goals>
 						<configuration>
-							<javaMainClass>me.jasonbaik.loadtester.tests.SendTest</javaMainClass>
+							<javaMainClass>com.ups.cra.icc.MQTTLoadGenerator</javaMainClass>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.jolokia</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>${docker.maven.plugin.version}</version>
-				<configuration>
-					<images>
-						<image>
-							<name>${docker.image}</name>
-							<build>
-								<from>${docker.from}</from>
-								<assembly>
-									<basedir>/deployments</basedir>
-									<descriptorRef>hawt-app</descriptorRef>
-								</assembly>
-								<env>
-									<JAVA_LIB_DIR>/deployments/lib</JAVA_LIB_DIR>
-									<JAVA_MAIN_CLASS>org.apache.camel.spring.Main</JAVA_MAIN_CLASS>
-								</env>
-							</build>
-						</image>
-					</images>
-				</configuration>
-			</plugin>
-			<!-- allows the route to be ran via 'mvn exec:java' -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.4.0</version>
-				<configuration>
-					<mainClass>org.apache.camel.spring.Main</mainClass>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>deploy</id>
-			<properties>
-				<fabric8.imagePullPolicySnapshot>Always</fabric8.imagePullPolicySnapshot>
-				<fabric8.recreate>true</fabric8.recreate>
-			</properties>
-			<build>
-				<defaultGoal>clean install docker:build docker:push</defaultGoal>
-			</build>
-		</profile>
-	</profiles>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>release.fusesource.org</id>
+			<name>FuseSource Release Repository</name>
+			<url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>ea.fusesource.org</id>
+			<name>FuseSource Community Early Access Release Repository</name>
+			<url>http://repo.fusesource.com/nexus/content/groups/ea</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>snapshot.fusesource.org</id>
+			<name>FuseSource Snapshot Repository</name>
+			<url>http://repo.fusesource.com/nexus/content/repositories/snapshots</url>
+			<snapshots>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
