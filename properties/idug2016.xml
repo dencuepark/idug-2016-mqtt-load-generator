@@ -16,14 +16,14 @@
 	</bean>
 
 	<bean id="brokerBase" class="me.jasonbaik.loadtester.valueobject.Broker" abstract="true">
-		<property name="username" value="admin" />
-		<property name="password" value="admin" />
+		<property name="username" value="${Broker.username}" />
+		<property name="password" value="${Broker.password}" />
 		<property name="connectors">
 			<util:map>
 				<entry key="MQTT">
 					<bean class="me.jasonbaik.loadtester.valueobject.Connector">
 						<property name="protocol" value="MQTT" />
-						<property name="port" value="1883" />
+						<property name="port" value="${Connector.port}" />
 					</bean>
 				</entry>
 			</util:map>
@@ -37,16 +37,16 @@
 				<property name="brokers">
 					<util:list value-type="me.jasonbaik.loadtester.valueobject.Broker">
 						<bean class="me.jasonbaik.loadtester.valueobject.Broker" parent="brokerBase">
-							<property name="hostname" value="amq1.idug2016.link" />
+							<property name="hostname" value="${Broker.amq1.url}" />
 						</bean>
 						<bean class="me.jasonbaik.loadtester.valueobject.Broker" parent="brokerBase">
-							<property name="hostname" value="amq2.idug2016.link" />
+							<property name="hostname" value="${Broker.amq2.url}" />
 						</bean>
 						<bean class="me.jasonbaik.loadtester.valueobject.Broker" parent="brokerBase">
-							<property name="hostname" value="amq3.idug2016.link" />
+							<property name="hostname" value="${Broker.amq3.url}" />
 						</bean>
 						<bean class="me.jasonbaik.loadtester.valueobject.Broker" parent="brokerBase">
-							<property name="hostname" value="amq4.idug2016.link" />
+							<property name="hostname" value="${Broker.amq4.url}" />
 						</bean>
 					</util:list>
 				</property>

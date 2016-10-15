@@ -1,6 +1,8 @@
 package me.jasonbaik.loadtester.sender;
 
-public interface Sender<T> {
+import me.jasonbaik.loadtester.reporter.Loggable;
+
+public interface Sender<T> extends Loggable {
 
 	public void init() throws Exception;
 

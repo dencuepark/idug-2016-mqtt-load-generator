@@ -339,6 +339,7 @@ public class FixedThroughputPerConnectionMQTTPublisher extends AbstractSender<by
 		}
 	}
 
+	@Override
 	public void log() {
 		System.out.print(getState());
 		System.out.print("\tPublished: ");

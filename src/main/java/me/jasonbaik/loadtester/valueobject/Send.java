@@ -37,4 +37,9 @@ public class Send<T> implements Serializable {
 		this.clientUUID = clientUUID;
 	}
 
+	@Override
+	public String toString() {
+		return "Send [name=" + name + ", senderConfig=" + senderConfig + ", clientUUID=" + clientUUID + "]";
+	}
+
 }
