@@ -22,9 +22,10 @@ import org.fusesource.mqtt.client.ExtendedListener;
 import org.fusesource.mqtt.client.MQTT;
 import org.fusesource.mqtt.client.Topic;
 
+import com.ups.cra.icc.RandomJSONGenerator;
+
 import me.jasonbaik.loadtester.client.MQTTClientFactory;
 import me.jasonbaik.loadtester.sender.AbstractSender;
-import me.jasonbaik.loadtester.util.RandomXmlGenerator;
 import me.jasonbaik.loadtester.util.SSLUtil;
 import me.jasonbaik.loadtester.valueobject.Broker;
 import me.jasonbaik.loadtester.valueobject.Payload;
@@ -55,6 +56,8 @@ public class FixedThroughputPerConnectionMQTTPublisher extends AbstractSender<by
 	private volatile List<Pair<String, CallbackConnection>> activeConnections;
 	private volatile DelayQueue<DelayedMessage> outboundMessages = new DelayQueue<DelayedMessage>();
 	private volatile long messageIntervalMillis;
+
+	private RandomJSONGenerator jsonGenerator;
 
 	static class Pair<K, V> {
 		public Pair(K key, V value) {
@@ -191,9 +194,10 @@ public class FixedThroughputPerConnectionMQTTPublisher extends AbstractSender<by
 		logger.info("Pre-generating a pool of " + getConfig().getMessagePoolSize() + " random payloads...");
 
 		payloads = new ArrayList<byte[]>(getConfig().getMessagePoolSize());
+		jsonGenerator = new RandomJSONGenerator(getConfig().getJsonTemplate());
 
 		for (int i = 0; i < getConfig().getMessagePoolSize(); i++) {
-			payloads.add(RandomXmlGenerator.generate(getConfig().getMessageByteLength()));
+			payloads.add(jsonGenerator.generate());
 		}
 
 		activeConnections = Collections.synchronizedList(new ArrayList<Pair<String, CallbackConnection>>(getConfig().getNumConnections()));
@@ -232,7 +236,8 @@ public class FixedThroughputPerConnectionMQTTPublisher extends AbstractSender<by
 	public void send() throws InterruptedException {
 		setState("Conn/Pub/Sub");
 
-		// Start a thread that periodically creates more connections with the broker(s)
+		// Start a thread that periodically creates more connections with the
+		// broker(s)
 		connectionService = Executors.newSingleThreadScheduledExecutor();
 		connectionService.scheduleAtFixedRate(() -> {
 
