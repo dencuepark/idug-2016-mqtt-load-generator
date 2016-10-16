@@ -10,7 +10,7 @@
 		<property name="ignoreResourceNotFound" value="false" />
 		<property name="locations">
 			<list>
-				<value>file:/tmp/idug2016.properties</value>
+				<value>file:/tmp/mqtt-load-generator.properties</value>
 			</list>
 		</property>
 	</bean>

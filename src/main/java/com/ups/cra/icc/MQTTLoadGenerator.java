@@ -18,7 +18,7 @@ public class MQTTLoadGenerator {
 	private static final Logger logger = LogManager.getLogger(MQTTLoadGenerator.class);
 
 	public static void main(String[] args) throws BeansException, Exception {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:/tmp/idug2016.xml");
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:context.xml");
 		Send<?> send = context.getBean(Send.class);
 		Sender<?> sender = SenderFactory.newInstance(send.getSenderConfig());
 

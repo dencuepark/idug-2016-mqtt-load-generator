@@ -7,22 +7,17 @@
 	"metadata": {
 		"annotations": {
 			"description": "mqtt-load-generator",
-			"iconClass": "jboss"
+			"iconClass": "java"
 		},
 		"labels": {
 			
 		},
-		"name": "gio-preproc"
+		"name": "mqtt-load-generator"
 	},
 	"parameters": [
 		{
-			"name": "APP_NAME",
-			"value": "gio-preproc",
-			"description": "Application Name"
-		},
-		{
 			"name": "GIT_REPO",
-			"value": "http://tfs.ups.com:8080/tfs/UpsProd/P08SGit_ICC/_git/OPENSHIFT_GIO_DEV",
+			"value": "https://github.com/dennis-ups/idug-2016-mqtt-load-generator",
 			"required": true,
 			"description": "Git repository, required"
 		},
@@ -32,40 +27,20 @@
 			"description": "Git ref to build"
 		},
 		{
-			"name": "GIO_PROP_ENV",
-			"value": "local"
-		},
-		{
 			"name": "SERVICE_NAME",
-			"value": "gio-preproc",
+			"value": "mqtt-load-generator",
 			"description": "Exposed Service name"
 		},
 		{
-			"name": "BUILDER_VERSION",
-			"value": "1.0.0",
-			"description": "Builder version"
-		},
-		{
-			"name": "APP_VERSION",
-			"value": "1.0.0",
-			"description": "Application version"
-		},
-		{
 			"name": "MAVEN_ARGS",
-			"value": "install -DskipTests -e -f GioParent/pom.xml -s GioParent/settings.xml -P Preproc",
+			"value": "install -e",
 			"description": "Arguments passed to mvn in the build"
 		},
 		{
-			"description": "Namespace in which the Fuse ImageStreams are installed. These ImageStreams are normally installed in the openshift namespace. You should only need to modify this if you've installed the ImageStreams in a different namespace/project.",
-			"name": "IMAGE_STREAM_NAMESPACE",
-			"value": "fuse",
-			"required": true
-		},
-		{
-			"generate": "expression",
 			"name": "BUILD_SECRET",
-			"description": "The secret needed to trigger a build",
-			"from": "[a-zA-Z0-9]{8}"
+			"from": "[a-zA-Z0-9]{8}",
+			"generate": "expression",
+			"description": "The secret needed to trigger a build"
 		}
 	],
 	"objects": [
@@ -73,44 +48,24 @@
 			"kind": "ImageStream",
 			"apiVersion": "v1",
 			"metadata": {
-				"name": "fuse-builder",
-				"labels": {
-					"project": "gio-preproc",
-					"version": "1.0.0"
-				}
+				"name": "s2i-java"
 			},
 			"spec": {
-				"dockerImageRepository": "njrarltcda00369.linux.us.ams1907.com/fuse/fuse-builder"
+				"dockerImageRepository": "docker.io/fabric8/s2i-java"
 			}
 		},
 		{
 			"kind": "ImageStream",
 			"apiVersion": "v1",
 			"metadata": {
-				"name": "${APP_NAME}",
-				"labels": {
-					"component": "${APP_NAME}",
-					"container": "fuse",
-					"group": "quickstarts",
-					"project": "${APP_NAME}",
-					"provider": "s2i",
-					"version": "${APP_VERSION}"
-				}
+				"name": "${APP_NAME}"
 			}
 		},
 		{
 			"kind": "BuildConfig",
 			"apiVersion": "v1",
 			"metadata": {
-				"name": "${APP_NAME}",
-				"labels": {
-					"component": "${APP_NAME}",
-					"container": "fuse",
-					"group": "quickstarts",
-					"project": "${APP_NAME}",
-					"provider": "s2i",
-					"version": "${APP_VERSION}"
-				}
+				"name": "${APP_NAME}"
 			},
 			"spec": {
 				"triggers": [
@@ -130,10 +85,7 @@
 						"type": "ConfigChange"
 					},
 					{
-						"type": "ImageChange",
-						"imageChange": {
-							
-						}
+						"type": "ImageChange"
 					}
 				],
 				"source": {
@@ -143,7 +95,7 @@
 						"ref": "${GIT_REF}"
 					},
 					"sourceSecret": {
-						"name": "gio-preproc-git-secret"
+						"name": "mqtt-load-generator-git-secret"
 					}
 				},
 				"strategy": {
@@ -151,8 +103,7 @@
 					"sourceStrategy": {
 						"from": {
 							"kind": "ImageStreamTag",
-							"namespace": "fuse",
-							"name": "fuse-builder:latest"
+							"name": "s2i-java:latest"
 						},
 						"forcePull": true,
 						"env": [
@@ -172,9 +123,6 @@
 						"kind": "ImageStreamTag",
 						"name": "${APP_NAME}:latest"
 					}
-				},
-				"resources": {
-					
 				}
 			}
 		},
@@ -182,22 +130,9 @@
 			"kind": "DeploymentConfig",
 			"apiVersion": "v1",
 			"metadata": {
-				"name": "${APP_NAME}",
-				"labels": {
-					"component": "${APP_NAME}",
-					"container": "fuse",
-					"group": "quickstarts",
-					"project": "${APP_NAME}",
-					"provider": "s2i",
-					"version": "${APP_VERSION}"
-				}
+				"name": "${APP_NAME}"
 			},
 			"spec": {
-				"strategy": {
-					"resources": {
-						
-					}
-				},
 				"triggers": [
 					{
 						"type": "ConfigChange"
@@ -219,25 +154,10 @@
 				"replicas": 1,
 				"selector": {
 					"component": "${APP_NAME}",
-					"container": "fuse",
-					"deploymentconfig": "${APP_NAME}",
-					"group": "quickstarts",
-					"project": "${APP_NAME}",
-					"provider": "s2i",
-					"version": "${APP_VERSION}"
+					"container": "mqtt-load-generator",
+					"deploymentconfig": "${APP_NAME}"
 				},
 				"template": {
-					"metadata": {
-						"labels": {
-							"component": "${APP_NAME}",
-							"container": "fuse",
-							"deploymentconfig": "${APP_NAME}",
-							"group": "quickstarts",
-							"project": "${APP_NAME}",
-							"provider": "s2i",
-							"version": "${APP_VERSION}"
-						}
-					},
 					"spec": {
 						"containers": [
 							{
@@ -245,17 +165,8 @@
 								"image": "${APP_NAME}:latest",
 								"volumeMounts": [
 									{
-										"name": "gio-preproc-config-volume",
-										"mountPath": "/home/jboss/config"
-									},
-									{
-										"name": "rkm-config-volume",
-										"mountPath": "/home/jboss/rkm"
-									},
-									{
-										"name": "secret-volume",
-										"mountPath": "/home/jboss/secret",
-										"readOnly": true
+										"name": "mqtt-load-generator-config-volume",
+										"mountPath": "/tmp"
 									}
 								],
 								"readinessProbe": {
@@ -268,104 +179,24 @@
 									},
 									"initialDelaySeconds": 30,
 									"timeoutSeconds": 5
-								},
-								"ports": [
-									{
-										"containerPort": 8181,
-										"name": "hawtio"
-									},
-									{
-										"containerPort": 8778,
-										"name": "jolokia"
-									}
-								],
-								"resources": {
-									
 								}
 							}
 						],
 						"volumes": [
 							{
-								"name": "gio-preproc-config-volume",
+								"name": "mqtt-load-generator-config-volume",
 								"configMap": {
-									"name": "gio-preproc-config",
+									"name": "mqtt-load-generator-config",
 									"items": [
 										{
-											"key": "gio-common-${GIO_PROP_ENV}.properties",
-											"path": "gio-common.properties"
-										},
-										{
-											"key": "gio-util-${GIO_PROP_ENV}.properties",
-											"path": "gio-util.properties"
-										},
-										{
-											"key": "gio-preproc-${GIO_PROP_ENV}.properties",
-											"path": "gio-preproc.properties"
+											"key": "mqtt-load-generator.properties",
+											"path": "mqtt-load-generator.properties"
 										}
 									]
-								}
-							},
-							{
-								"name": "rkm-config-volume",
-								"configMap": {
-									"name": "rkm-config",
-									"items": [
-										{
-											"key": "rkm-config-base.properties",
-											"path": "rkm-config-base.properties"
-										},
-										{
-											"key": "rkm-client.reg",
-											"path": "rkm-client.reg"
-										}
-									]
-								}
-							},
-							{
-								"name": "secret-volume",
-								"secret": {
-									"secretName": "rkm-secret"
 								}
 							}
 						]
 					}
-				}
-			}
-		},
-		{
-			"apiVersion": "v1",
-			"kind": "Service",
-			"metadata": {
-				"name": "hawtio",
-				"namespace": "fuse"
-			},
-			"spec": {
-				"ports": [
-					{
-						"protocol": "TCP",
-						"port": 8181,
-						"targetPort": 8181
-					}
-				],
-				"selector": {
-					"container": "fuse"
-				},
-				"type": "ClusterIP",
-				"sessionAffinity": "ClientIP"
-			}
-		},
-		{
-			"apiVersion": "v1",
-			"kind": "Route",
-			"metadata": {
-				"name": "hawtio",
-				"namespace": "fuse"
-			},
-			"spec": {
-				"host": "hawtio-fuse.paasdev.ams1907.com",
-				"to": {
-					"kind": "Service",
-					"name": "hawtio"
 				}
 			}
 		}
