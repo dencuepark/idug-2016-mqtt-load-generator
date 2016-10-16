@@ -16,6 +16,11 @@
 	},
 	"parameters": [
 		{
+			"name": "APP_NAME",
+			"value": "mqtt-load-generator",
+			"description": "Application Name"
+		},
+		{
 			"name": "GIT_REPO",
 			"value": "https://github.com/dennis-ups/idug-2016-mqtt-load-generator",
 			"required": true,
@@ -35,12 +40,6 @@
 			"name": "MAVEN_ARGS",
 			"value": "install -e",
 			"description": "Arguments passed to mvn in the build"
-		},
-		{
-			"name": "BUILD_SECRET",
-			"from": "[a-zA-Z0-9]{8}",
-			"generate": "expression",
-			"description": "The secret needed to trigger a build"
 		}
 	],
 	"objects": [
@@ -76,12 +75,6 @@
 						}
 					},
 					{
-						"type": "Generic",
-						"generic": {
-							"secret": "${BUILD_SECRET}"
-						}
-					},
-					{
 						"type": "ConfigChange"
 					},
 					{
@@ -95,7 +88,7 @@
 						"ref": "${GIT_REF}"
 					},
 					"sourceSecret": {
-						"name": "mqtt-load-generator-git-secret"
+						"name": "dennis-idug-github-secret"
 					}
 				},
 				"strategy": {
@@ -130,7 +123,13 @@
 			"kind": "DeploymentConfig",
 			"apiVersion": "v1",
 			"metadata": {
-				"name": "${APP_NAME}"
+				"name": "${APP_NAME}",
+				"labels": {
+					"component": "${APP_NAME}",
+					"container": "${APP_NAME}",
+					"project": "${APP_NAME}",
+					"provider": "s2i"
+				}
 			},
 			"spec": {
 				"triggers": [
@@ -154,10 +153,19 @@
 				"replicas": 1,
 				"selector": {
 					"component": "${APP_NAME}",
-					"container": "mqtt-load-generator",
-					"deploymentconfig": "${APP_NAME}"
+					"container": "${APP_NAME}",
+					"project": "${APP_NAME}",
+					"provider": "s2i"
 				},
 				"template": {
+					"metadata": {
+						"labels": {
+							"component": "${APP_NAME}",
+							"container": "${APP_NAME}",
+							"project": "${APP_NAME}",
+							"provider": "s2i"
+						}
+					},
 					"spec": {
 						"containers": [
 							{
