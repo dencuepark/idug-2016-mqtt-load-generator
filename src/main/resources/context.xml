@@ -65,7 +65,7 @@
 				<property name="connectionStepSize" value="${FixedThroughputPerConnectionMQTTPublisherConfig.connectionStepSize}" />
 				<property name="duration" value="${FixedThroughputPerConnectionMQTTPublisherConfig.duration}" />
 				<property name="durationUnit" value="${FixedThroughputPerConnectionMQTTPublisherConfig.durationUnit}" />
-				<property name="jsonTemplate" value="${FixedThroughputPerConnectionMQTTPublisherConfig.jsonTemplate}" />
+				<property name="jsonTemplateFile" value="${FixedThroughputPerConnectionMQTTPublisherConfig.jsonTemplateFile}" />
 			</bean>
 		</property>
 	</bean>

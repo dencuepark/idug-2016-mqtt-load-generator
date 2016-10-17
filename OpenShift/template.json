@@ -199,6 +199,10 @@
 										{
 											"key": "mqtt-load-generator.properties",
 											"path": "mqtt-load-generator.properties"
+										},
+										{
+											"key": "mqtt-load-generator-json-template.json",
+											"path": "mqtt-load-generator-json-template.json"
 										}
 									]
 								}
