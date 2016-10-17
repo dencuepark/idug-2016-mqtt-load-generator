@@ -42,7 +42,7 @@ public class FixedThroughputPerConnectionMQTTPublisherConfig extends AbstractSen
 	private long messageInterval;
 	private TimeUnit messageIntervalUnit;
 
-	private String jsonTemplate;
+	private String jsonTemplateFile;
 
 	@Override
 	public Class<FixedThroughputPerConnectionMQTTPublisher> getSenderClass() {
@@ -229,12 +229,12 @@ public class FixedThroughputPerConnectionMQTTPublisherConfig extends AbstractSen
 		this.messageIntervalUnit = messageIntervalUnit;
 	}
 
-	public String getJsonTemplate() {
-		return jsonTemplate;
+	public String getJsonTemplateFile() {
+		return jsonTemplateFile;
 	}
 
-	public void setJsonTemplate(String jsonTemplate) {
-		this.jsonTemplate = jsonTemplate;
+	public void setJsonTemplateFile(String jsonTemplateFile) {
+		this.jsonTemplateFile = jsonTemplateFile;
 	}
 
 	@Override
@@ -243,7 +243,8 @@ public class FixedThroughputPerConnectionMQTTPublisherConfig extends AbstractSen
 				+ keyStorePassword + ", trustStore=" + trustStore + ", trustStorePassword=" + trustStorePassword + ", messageByteLength=" + messageByteLength + ", messagePoolSize=" + messagePoolSize
 				+ ", qos=" + qos + ", topic=" + topic + ", cleanSession=" + cleanSession + ", keepAliveIntervalMilli=" + keepAliveIntervalMilli + ", numConnections=" + numConnections
 				+ ", newConnectionInterval=" + newConnectionInterval + ", newConnectionIntervalUnit=" + newConnectionIntervalUnit + ", connectionStepSize=" + connectionStepSize + ", duration="
-				+ duration + ", durationUnit=" + durationUnit + ", messageInterval=" + messageInterval + ", messageIntervalUnit=" + messageIntervalUnit + ", jsonTemplate=" + jsonTemplate + "]";
+				+ duration + ", durationUnit=" + durationUnit + ", messageInterval=" + messageInterval + ", messageIntervalUnit=" + messageIntervalUnit + ", jsonTemplateFile=" + jsonTemplateFile
+				+ "]";
 	}
 
 }

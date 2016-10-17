@@ -1,5 +1,6 @@
 package me.jasonbaik.loadtester.sender.impl;
 
+import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,10 +23,9 @@ import org.fusesource.mqtt.client.ExtendedListener;
 import org.fusesource.mqtt.client.MQTT;
 import org.fusesource.mqtt.client.Topic;
 
-import com.ups.cra.icc.RandomJSONGenerator;
-
 import me.jasonbaik.loadtester.client.MQTTClientFactory;
 import me.jasonbaik.loadtester.sender.AbstractSender;
+import me.jasonbaik.loadtester.util.RandomJSONGenerator;
 import me.jasonbaik.loadtester.util.SSLUtil;
 import me.jasonbaik.loadtester.valueobject.Broker;
 import me.jasonbaik.loadtester.valueobject.Payload;
@@ -194,7 +194,7 @@ public class FixedThroughputPerConnectionMQTTPublisher extends AbstractSender<by
 		logger.info("Pre-generating a pool of " + getConfig().getMessagePoolSize() + " random payloads...");
 
 		payloads = new ArrayList<byte[]>(getConfig().getMessagePoolSize());
-		jsonGenerator = new RandomJSONGenerator(getConfig().getJsonTemplate());
+		jsonGenerator = new RandomJSONGenerator(new FileInputStream(getConfig().getJsonTemplateFile()));
 
 		for (int i = 0; i < getConfig().getMessagePoolSize(); i++) {
 			payloads.add(jsonGenerator.generate());

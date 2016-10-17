@@ -1,7 +1,8 @@
-package com.ups.cra.icc;
+package me.jasonbaik.loadtester.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,12 +19,12 @@ public class RandomJSONGenerator {
 
 	private List<Field> fields = new LinkedList<Field>();
 
-	public RandomJSONGenerator(String jsonTemplate) {
-		parseTemplate(jsonTemplate);
+	public RandomJSONGenerator(InputStream jsonTemplateInputStream) {
+		parseTemplate(jsonTemplateInputStream);
 	}
 
-	public void parseTemplate(String jsonTemplate) {
-		try (Scanner scanner = new Scanner(jsonTemplate)) {
+	public void parseTemplate(InputStream jsonTemplateFile) {
+		try (Scanner scanner = new Scanner(jsonTemplateFile)) {
 			scanner.useDelimiter("%");
 
 			while (scanner.hasNext()) {
