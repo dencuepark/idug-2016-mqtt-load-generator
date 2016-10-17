@@ -180,7 +180,7 @@ public class RandomJSONGenerator {
 
 		@Override
 		public String getValue() {
-			return RandomStringUtils.random(minLength + ThreadLocalRandom.current().nextInt(maxLength - minLength + 1));
+			return RandomStringUtils.randomAlphanumeric(minLength + ThreadLocalRandom.current().nextInt(maxLength - minLength + 1)).toUpperCase();
 			// Handle arithmetic overflow
 		}
 

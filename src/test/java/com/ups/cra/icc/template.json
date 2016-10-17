@@ -1,10 +1,34 @@
 {
-	"timestamp": "%TIMESTAMP:%",
-	"device_id": "sensor-%INT:0,5000%",
-	"message_id": "%ID:%",
-	"category": "CLASS-%INT:0,10%",
-	"temperature": "%DOUBLE:15,40,1%",
-	"pressure": "%INT:100000,110000%",
-	"luminosity": "%INT:0,500%",
-	"acceleration": "%DOUBLE:0,100,1%"
+	"MessageId": "%ID:%",
+	"DeviceId": "sensor-%INT:0,5000%",
+	"Category": "CLASS-%INT:0,10%",
+	"ShipmentId": "1Z345%STRING:10,10%",
+	"Timestamp": "%TIMESTAMP:%",
+	"TemperatureData": {
+		"ambientTemperature": "%DOUBLE:15,40,1%",
+		"ambientTemperaturecelsiusToFahrenheit": "%DOUBLE:15,40,1%",
+		"targetTemperature": "%DOUBLE:15,40,1%"
+	},
+	"AccelerometerData": {
+		"x": "%DOUBLE:0,100,1%",
+		"y": "%DOUBLE:0,100,1%",
+		"z": "%DOUBLE:0,100,1%"
+	},
+	"HumidityData": {
+		"humidityTemperature": "%DOUBLE:0,100,1%",
+		"humidityTemperaturecelsiusToFahrenheit": "%DOUBLE:0,100,1%",
+		"relativeHumidity": "%DOUBLE:0,100,1%"
+	},
+	"MagnetometerData": {
+		"x": "%DOUBLE:0,100,1%",
+		"y": "%DOUBLE:0,100,1%",
+		"z": "%DOUBLE:0,100,1%"
+	},
+	"BarometerData": "%INT:100000,110000%",
+	"GyroscopeData": {
+		"x": "%DOUBLE:0,100,1%",
+		"y": "%DOUBLE:0,100,1%",
+		"z": "%DOUBLE:0,100,1%"
+	},
+	"LuxometerData": "%INT:0,500%"
 }
