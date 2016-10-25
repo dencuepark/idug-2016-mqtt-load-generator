@@ -304,7 +304,7 @@ public class FixedThroughputPerConnectionMQTTPublisher extends AbstractSender<by
 
 			byte[] payload = payloads.get(index % payloads.size());
 
-			msg.conn.value.publish(getConfig().getTopic(), Payload.toBytes(msg.conn.key, Integer.toString(index), payload), getConfig().getQos(), false, publishCallback);
+			msg.conn.value.publish(getConfig().getTopic(), payload, getConfig().getQos(), false, publishCallback);
 			publishedCount.incrementAndGet();
 
 			// Put the next message for this connection
