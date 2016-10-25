@@ -1,7 +1,7 @@
 {
 	"MessageId": "%ID:%",
 	"DeviceId": "sensor-%INT:0,5000%",
-	"Category": "CLASS-%INT:0,10%",
+	"ShipmentCategory": "CLASS-%INT:0,10%",
 	"ShipmentId": "1Z345%STRING:10,10%",
 	"Timestamp": "%TIMESTAMP:%",
 	"TemperatureData": {
